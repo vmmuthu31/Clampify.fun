@@ -120,6 +120,7 @@ function WalletButton() {
 
         <DropdownMenuItem className="cursor-pointer" asChild>
           <a
+            // TODO: change to update explorer link
             href={`https://scan.test2.btcs.network/address/${address}`}
             target="_blank"
             rel="noopener noreferrer"
