@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
-import Navbar from "@/components/Navbar";
+import { Navbar } from "@/components/Navbar";
 import WalletProvider from "@/providers/WalletProvider";
 
 function ClientBody({ children }: { children: ReactNode }) {
