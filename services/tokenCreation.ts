@@ -7,8 +7,8 @@ const isBrowser = (): boolean => typeof window !== "undefined";
 
 const { ethereum } = isBrowser() ? window : { ethereum: null };
 
-const contract_address: string = "0xf1b01b252E30e826D84D569A26d9eF0b4aa095dD"; // Clampify Factory Contract Address
-const governance_address: string = "0x51708A5d10D29c030f3Cd590714dd9795ee53732"; // Clampify Governance Contract Address
+const contract_address: string = "0x7ECd045257107c84129BCce9DBa8feb211b4a7E7"; // Clampify Factory Contract Address
+const governance_address: string = "0x9f49eB31F06c9F84Dc049CCbf3aC1E89B36b6aB9"; // Clampify Governance Contract Address
 
 // Add RPC URL for the network you're using (0G testnet)
 const RPC_URL = "https://rpc-amoy.polygon.technology/";
@@ -28,6 +28,7 @@ interface TokenInfo {
 }
 
 export const Mint = async (
+  creator: string,
   name: string,
   symbol: string,
   initialSupply: string,
@@ -56,8 +57,10 @@ export const Mint = async (
     const initialPriceWei = ethers.utils.parseEther(initialPrice);
     const depositAmount = ethers.utils.parseEther("0.01");
 
+    console.log("Creating token with creator:", creator);
     // Create token
     const tx = await contract.createToken(
+      creator,
       name,
       symbol,
       initialSupply,
@@ -367,6 +370,7 @@ export const hasVoted = async (
 };
 
 export const createProposal = async (
+  creator: string,
   tokenAddress: string,
   title: string,
   description: string,

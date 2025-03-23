@@ -6,11 +6,12 @@ const isBrowser = (): boolean => typeof window !== "undefined";
 
 const { ethereum } = isBrowser() ? window : { ethereum: null };
 
-const contract_address: string = "0xf1b01b252E30e826D84D569A26d9eF0b4aa095dD"; // Clampify Factory Contract Address
+const contract_address: string = "0x7ECd045257107c84129BCce9DBa8feb211b4a7E7"; // Clampify Factory Contract Address
 
 const RPC_URL = "https://rpc.test2.btcs.network/";
 
 interface TokenInfo {
+
   name: string;
   symbol: string;
   totalSupply: string;
@@ -19,6 +20,7 @@ interface TokenInfo {
 }
 
 export const Mint = async (
+  creator: string,
   name: string,
   symbol: string,
   initialSupply: string,
@@ -49,6 +51,7 @@ export const Mint = async (
 
     // Create token
     const tx = await contract.createToken(
+      creator,
       name,
       symbol,
       initialSupply,
@@ -111,12 +114,13 @@ export const TokenReturnOnBuy = async (
 };
 
 export const buyTokens = async (
+  creator: string,
   tokenAddress: string,
   amount: string,
   tokenAmount: string
 ): Promise<{ hash: string }> => {
   try {
-    console.log(tokenAddress, amount, tokenAmount);
+    console.log(tokenAddress, amount, tokenAmount, creator);
     console.log("at buy tokens");
 
     const provider =
@@ -143,7 +147,7 @@ export const buyTokens = async (
     // const amountInWei = ethers.utils.parseEther("0.001");
 
     // Execute buy transaction
-    const tx = await contract.buyTokens(amountInWei, {
+    const tx = await contract.buyTokens(creator, amountInWei, {
       value: tokenAmountInWei,
     });
 
@@ -247,9 +251,13 @@ export const TokenReturnOnSell = async (
   }
 };
 
-export const sellTokens = async (tokenAddress: string, amount: string) => {
+export const sellTokens = async (
+  creator: string,
+  tokenAddress: string,
+  amount: string
+) => {
   try {
-    console.log(tokenAddress, amount);
+    console.log(tokenAddress, amount, creator);
     const provider =
       ethereum != null
         ? new ethers.providers.Web3Provider(ethereum)
@@ -270,7 +278,10 @@ export const sellTokens = async (tokenAddress: string, amount: string) => {
 
     const amountInWei = ethers.utils.parseEther(amount);
 
-    const tx = await contract.sellTokens(amountInWei);
+    console.log(amountInWei);
+    console.log(creator);
+
+    const tx = await contract.sellTokens(creator, amountInWei);
 
     const receipt = await tx.wait();
     console.log("Sell transaction confirmed:", receipt);
