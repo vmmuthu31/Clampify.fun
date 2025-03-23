@@ -163,10 +163,14 @@ contract ClampifyToken is ERC20, ERC20Burnable, ReentrancyGuard {
     
     /**
      * @dev Buy tokens using the bonding curve
+     * @param buyer Buyer address
      * @param desiredTokenAmount Desired amount of tokens to buy (may be limited by max supply)
      * @notice Send enough ETH to cover the purchase
      */
-    function buyTokens(uint256 desiredTokenAmount) public payable nonReentrant returns (uint256 actualTokenAmount) {
+    function buyTokens(
+        address buyer,
+        uint256 desiredTokenAmount
+    ) public payable nonReentrant returns (uint256 actualTokenAmount) {
         require(tradingEnabled, "Trading is disabled");
         require(bondingCurveEnabled, "Bonding curve is disabled");
         require(msg.value > 0, "Must send ETH to buy tokens");
@@ -194,7 +198,7 @@ contract ClampifyToken is ERC20, ERC20Burnable, ReentrancyGuard {
         // Refund excess ETH if any
         if (msg.value > requiredEth) {
             uint256 refund = msg.value - requiredEth;
-            (bool success, ) = payable(msg.sender).call{value: refund}("");
+            (bool success, ) = payable(buyer).call{value: refund}("");
             require(success, "Refund failed");
         }
         
@@ -208,29 +212,29 @@ contract ClampifyToken is ERC20, ERC20Burnable, ReentrancyGuard {
         }
         
         // Check if we need to lock this holder
-        if (balanceOf(msg.sender) > 0) {
-            checkAndLockLargeHolder(msg.sender);
+        if (balanceOf(buyer) > 0) {
+            checkAndLockLargeHolder(buyer);
         }
         
         // Mint tokens to buyer
-        _mint(msg.sender, desiredTokenAmount);
+        _mint(buyer, desiredTokenAmount);
         
         // Update total volume
         totalVolume += desiredTokenAmount;
         
         // Track transaction
-        _addTransaction(msg.sender, true, desiredTokenAmount, requiredEth, currentPrice);
+        _addTransaction(buyer, true, desiredTokenAmount, requiredEth, currentPrice);
         
         // Update candle data
         _updateCandleData(oldPrice, currentPrice, desiredTokenAmount);
         
         // Update top holders
-        _updateHolderInfo(msg.sender, balanceOf(msg.sender));
+        _updateHolderInfo(buyer, balanceOf(buyer));
         
         // Update market cap
         marketCap = totalSupply() * currentPrice / 10**18;
         
-        emit TokensPurchased(msg.sender, requiredEth, desiredTokenAmount, currentPrice);
+        emit TokensPurchased(buyer, requiredEth, desiredTokenAmount, currentPrice);
         
         return desiredTokenAmount;
     }
@@ -293,22 +297,26 @@ contract ClampifyToken is ERC20, ERC20Burnable, ReentrancyGuard {
     
     /**
      * @dev Sell tokens back to the bonding curve
+     * @param seller Seller address
      * @param tokenAmount Amount of tokens to sell
      * @notice You must have sufficient unlocked tokens to sell
      */
-    function sellTokens(uint256 tokenAmount) external nonReentrant returns (uint256 ethReceived) {
+    function sellTokens(
+        address seller,
+        uint256 tokenAmount
+    ) external nonReentrant returns (uint256 ethReceived) {
         require(tradingEnabled, "Trading is disabled");
         require(bondingCurveEnabled, "Bonding curve is disabled");
         require(tokenAmount > 0, "Amount must be > 0");
-        require(balanceOf(msg.sender) >= tokenAmount, "Insufficient balance");
+        require(balanceOf(seller) >= tokenAmount, "Insufficient balance");
         
         // Check if seller is creator and still in lockup period
-        if (msg.sender == creator && block.timestamp < creatorLockupEnds) {
+        if (seller == creator && block.timestamp < creatorLockupEnds) {
             require(balanceOf(creator) - tokenAmount >= initialSupply / 2, "Creator cannot sell below 50% of initial supply during lockup");
         }
         
         // Check if holder is locked
-        require(block.timestamp >= holderLockTime[msg.sender], "Tokens are locked");
+        require(block.timestamp >= holderLockTime[seller], "Tokens are locked");
         
         // Calculate ETH to return based on bonding curve
         uint256 ethAmount = calculateSaleReturn(tokenAmount);
@@ -322,7 +330,7 @@ contract ClampifyToken is ERC20, ERC20Burnable, ReentrancyGuard {
         uint256 oldPrice = currentPrice;
         
         // Burn tokens
-        _burn(msg.sender, tokenAmount);
+        _burn(seller, tokenAmount);
         
         // Update current price
         updatePrice();
@@ -343,25 +351,25 @@ contract ClampifyToken is ERC20, ERC20Burnable, ReentrancyGuard {
         }
         
         // Transfer ETH to seller
-        (bool success, ) = payable(msg.sender).call{value: netReturn}("");
+        (bool success, ) = payable(seller).call{value: netReturn}("");
         require(success, "ETH transfer failed");
         
         // Update total volume
         totalVolume += tokenAmount;
         
         // Track transaction
-        _addTransaction(msg.sender, false, tokenAmount, netReturn, currentPrice);
+        _addTransaction(seller, false, tokenAmount, netReturn, currentPrice);
         
         // Update candle data
         _updateCandleData(oldPrice, currentPrice, tokenAmount);
         
         // Update top holders
-        _updateHolderInfo(msg.sender, balanceOf(msg.sender));
+        _updateHolderInfo(seller, balanceOf(seller));
         
         // Update market cap
         marketCap = totalSupply() * currentPrice / 10**18;
         
-        emit TokensSold(msg.sender, netReturn, tokenAmount, currentPrice);
+        emit TokensSold(seller, netReturn, tokenAmount, currentPrice);
         
         return netReturn;
     }

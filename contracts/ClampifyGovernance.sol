@@ -96,6 +96,7 @@ contract ClampifyGovernance is ReentrancyGuard, Ownable {
     
     /**
      * @dev Create a proposal
+     * @param proposer Proposer address
      * @param tokenAddress Token address
      * @param title Proposal title
      * @param description Proposal description
@@ -104,6 +105,7 @@ contract ClampifyGovernance is ReentrancyGuard, Ownable {
      * @return Proposal ID
      */
     function createProposal(
+        address proposer,
         address tokenAddress,
         string memory title,
         string memory description,
@@ -114,14 +116,14 @@ contract ClampifyGovernance is ReentrancyGuard, Ownable {
         require(gov.isActive, "Governance not active for this token");
         
         // Check if proposer has enough tokens
-        uint256 balance = IERC20(tokenAddress).balanceOf(msg.sender);
+        uint256 balance = IERC20(tokenAddress).balanceOf(proposer);
         require(balance >= gov.proposalThreshold, "Insufficient tokens to create proposal");
         
         uint256 proposalId = proposalCount[tokenAddress] + 1;
         Proposal storage proposal = proposals[tokenAddress][proposalId];
         
         proposal.id = proposalId;
-        proposal.proposer = msg.sender;
+        proposal.proposer = proposer;
         proposal.title = title;
         proposal.description = description;
         proposal.createdAt = block.timestamp;
@@ -134,32 +136,38 @@ contract ClampifyGovernance is ReentrancyGuard, Ownable {
         
         proposalCount[tokenAddress] = proposalId;
         
-        emit ProposalCreated(tokenAddress, proposalId, title, msg.sender);
+        emit ProposalCreated(tokenAddress, proposalId, title, proposer);
         
         return proposalId;
     }
     
     /**
      * @dev Cast a vote on a proposal
+     * @param voter Voter address
      * @param tokenAddress Token address
      * @param proposalId Proposal ID
      * @param support Whether to support the proposal
      */
-    function castVote(address tokenAddress, uint256 proposalId, bool support) external nonReentrant {
+    function castVote(
+        address voter,
+        address tokenAddress,
+        uint256 proposalId,
+        bool support
+    ) external nonReentrant {
         require(tokenGovernance[tokenAddress].isActive, "Governance not active for this token");
         require(proposalId > 0 && proposalId <= proposalCount[tokenAddress], "Invalid proposal ID");
         
         Proposal storage proposal = proposals[tokenAddress][proposalId];
         require(block.timestamp < proposal.votingEndsAt, "Voting period ended");
         require(!proposal.executed, "Proposal already executed");
-        require(!proposal.hasVoted[msg.sender], "Already voted");
+        require(!proposal.hasVoted[voter], "Already voted");
         
         // Get voter's token balance
-        uint256 weight = IERC20(tokenAddress).balanceOf(msg.sender);
+        uint256 weight = IERC20(tokenAddress).balanceOf(voter);
         require(weight > 0, "No voting power");
         
         // Record vote
-        proposal.hasVoted[msg.sender] = true;
+        proposal.hasVoted[voter] = true;
         
         if (support) {
             proposal.yesVotes += weight;
@@ -167,7 +175,7 @@ contract ClampifyGovernance is ReentrancyGuard, Ownable {
             proposal.noVotes += weight;
         }
         
-        emit VoteCast(tokenAddress, proposalId, msg.sender, support, weight);
+        emit VoteCast(tokenAddress, proposalId, voter, support, weight);
     }
     
     /**

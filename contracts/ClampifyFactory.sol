@@ -40,6 +40,7 @@ contract ClampifyFactory is Ownable, ReentrancyGuard {
     
     /**
      * @dev Create a new token with bonding curve
+     * @param creator Address of the token creator
      * @param name Token name
      * @param symbol Token symbol
      * @param initialSupply Initial supply of tokens
@@ -51,6 +52,7 @@ contract ClampifyFactory is Ownable, ReentrancyGuard {
      * @return tokenAddress Address of the new token
      */
     function createToken(
+        address creator,
         string memory name,
         string memory symbol,
         uint256 initialSupply,
@@ -70,7 +72,7 @@ contract ClampifyFactory is Ownable, ReentrancyGuard {
             initialSupply,
             maxSupply,
             initialPrice,
-            msg.sender,
+            creator,
             creatorLockupPeriod,
             address(this)
         );
@@ -80,7 +82,7 @@ contract ClampifyFactory is Ownable, ReentrancyGuard {
         // Store token info
         tokens[tokenAddress] = TokenInfo({
             tokenAddress: tokenAddress,
-            creator: msg.sender,
+            creator: creator,
             createdAt: block.timestamp,
             lockupPeriod: creatorLockupPeriod,
             liquidityLocked: lockLiquidity,
@@ -89,7 +91,7 @@ contract ClampifyFactory is Ownable, ReentrancyGuard {
         
         allTokens.push(tokenAddress);
         
-        emit TokenCreated(tokenAddress, msg.sender, name, symbol);
+        emit TokenCreated(tokenAddress, creator, name, symbol);
         
         return tokenAddress;
     }
