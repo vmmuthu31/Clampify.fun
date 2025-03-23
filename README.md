@@ -137,9 +137,17 @@ Let’s build a safer, decentralized on-chain culture — together.
 🚀 #LaunchWithClampify  
 
 
-## Contract Addresses
+## Contract Addresses on Polygon Amoy
 
 - Clampify Factory: 0xf1b01b252E30e826D84D569A26d9eF0b4aa095dD
 - Clampify Governance: 0x51708A5d10D29c030f3Cd590714dd9795ee53732
 - Clampify Dex: 0x3FC6C1FD08837bd6a92e7B2e13F097D1351BcbdB
+
+
+## Contract Addresses on t1
+
+- Clampify Factory: 0xD4f998A32961cD69B5Aea87362861557b7dF05F4
+- Clampify Governance: 0xd63428D98892F0B47aE9E8c8aFBb88C2453e4C77
+- Clampify Dex: 0x69b2EaC3e8998ECad55aFB96475e17799f4C6AB9
+
 
