@@ -181,6 +181,7 @@ export default function LaunchPage() {
         "gwei"
       );
       const tokenAddress = await Mint(
+        user?.wallet?.address || "",
         tokenForm.name,
         tokenForm.symbol,
         tokenForm.initialSupply,

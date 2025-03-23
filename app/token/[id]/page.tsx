@@ -386,6 +386,7 @@ export default function TokenPage() {
         setEstimatedReturn(tokenReturnOnBuy.tokenAmount.toString());
 
         const buy = await buyTokens(
+          user?.wallet?.address || "",
           tokenDetails?.contractAddress || "",
           estimatedReturn,
           coreAmount
@@ -417,6 +418,7 @@ export default function TokenPage() {
         setEstimatedReturn(tokenReturnOnBuy.ethAmount.toString());
 
         const sell = await sellTokens(
+          user?.wallet?.address || "",
           tokenDetails?.contractAddress || "",
           tokenAmount
         );
@@ -1289,7 +1291,7 @@ export default function TokenPage() {
                           {parseFloat(
                             recentTransactions?.prices[i] || "0"
                           )?.toFixed(10)}{" "}
-                          tCORE
+                          POL
                         </div>
                       )}
                       <div className="text-white/50 text-xs">
