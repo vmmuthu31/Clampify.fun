@@ -74,12 +74,12 @@ export function Navbar() {
             className="flex items-center gap-2"
           >
             <motion.div
-              className="w-10 h-10 rounded-full bg-gradient-to-r from-[#ffae5c] to-[#ff9021] flex items-center justify-center"
+              className="w-10 h-10 rounded-full flex items-center justify-center"
               whileHover={{ rotate: 180 }}
               transition={{ duration: 0.5 }}
             >
               <Image
-                src="/logo.png"
+                src="/logo.svg"
                 alt="Clampify Logo"
                 width={25}
                 height={25}
