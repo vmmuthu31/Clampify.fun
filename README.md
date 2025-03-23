@@ -53,6 +53,9 @@ Clampify is the **first truly rugproof launchpad** that puts **community and tra
 
 ## 🎯 Bounties We're Targeting
 
+### 🛠️ T1 – Best Use of `𝚝𝟷` ($2,500)
+- We use T1 Protocol to enforce secure meme token launches by handling permissionless token creation and smart constraints for supply locking, anti-rug rules, and unlock schedules. It powers the core logic behind Clampify's rugproof protocol.
+
 ### 🗄️ 0G – Storage ($1,200)
 - Store launch metadata, token lock configurations, audit logs
 - Build **off-chain verifiable** transparency layer for token history
@@ -61,12 +64,9 @@ Clampify is the **first truly rugproof launchpad** that puts **community and tra
 - Integrate Privy for **seamless identity abstraction**
 - Protect user data while allowing **secure token interaction**
 
-### 🛠️ T1 – Best Use of `𝚝𝟷` ($2,500)
-- Use T1 primitives to power **smart lock triggers**, unlock schedules, and dynamic protocol upgrades
 
 ### 🙈 Nillion – Best Use of SecretLLM ($2,500)
-- Private AI-based scoring for **rug risk, token volatility, and project trustworthiness**
-- Use Nillion to detect red flags while keeping logic confidential
+- We have used Nillion's Completions API and generated the JWT token by connecting the wallet. We have used Langchain to handle that API. I have created the custom Langchain LLM handler module for Nillion in Python. The backend server is running, and the data will be sent to the frontend.
 
 ---
 
@@ -131,7 +131,7 @@ Clampify is the **first truly rugproof launchpad** that puts **community and tra
 **Launch meme tokens that don’t rug.**  
 Let’s build a safer, decentralized on-chain culture — together.
 
-👉 [Clampify.fun](https://clampify-fun.vercel.app)  
+👉 [Clampify.fun](https://clampify.fun)  
 🧠 Built for the Ethglobal 
 🔐 #RugproofByDesign  
 🚀 #LaunchWithClampify  
