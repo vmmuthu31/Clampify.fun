@@ -140,6 +140,11 @@ interface CandleDataPoint {
   volume: number;
 }
 
+type Network = {
+  name: string;
+  chainId: number;
+};
+
 export default function TokenPage() {
   const params = useParams();
   const tokenId = params.id as string; // Get the ID from URL
@@ -208,6 +213,10 @@ export default function TokenPage() {
     lockLiquidity: false,
     liquidityLockPeriod: "0",
     creatorLockupPeriod: "0",
+  });
+  const [currentNetwork, setCurrentNetwork] = useState<Network>({
+    name: "Polygon Amoy",
+    chainId: 80002
   });
 
   // Calculate days left in lock
@@ -389,24 +398,28 @@ export default function TokenPage() {
           user?.wallet?.address || "",
           tokenDetails?.contractAddress || "",
           estimatedReturn,
-          coreAmount
+          coreAmount,
+          currentNetwork.chainId === 299792 ? "t1" : "polygon"
         );
         if (buy.hash) {
-          // Record the buy transaction
+          const explorerHash = currentNetwork.chainId === 299792 
+            ? buy.hash.replace('0x', '') // T1 format
+            : buy.hash; // Polygon format
+          
           await recordTransaction({
             address: tokenDetails?.contractAddress || undefined,
             creator: user?.wallet?.address,
             type: TransactionType.BUY,
             amount: estimatedReturn,
             price: coreAmount,
-            txHash: buy.hash,
+            txHash: explorerHash,
             name: tokenDetails?.name || undefined,
             symbol: tokenDetails?.symbol || undefined,
           });
 
           setTransactionStatus({
             status: "success",
-            hash: buy.hash,
+            hash: explorerHash,
           });
           await fetchCurrentPrice();
         }
@@ -420,24 +433,28 @@ export default function TokenPage() {
         const sell = await sellTokens(
           user?.wallet?.address || "",
           tokenDetails?.contractAddress || "",
-          tokenAmount
+          tokenAmount,
+          currentNetwork.chainId === 299792 ? "t1" : "polygon"
         );
         if (sell.hash) {
-          // Record the sell transaction
+          const explorerHash = currentNetwork.chainId === 299792 
+            ? sell.hash.replace('0x', '') // T1 format
+            : sell.hash; // Polygon format
+
           await recordTransaction({
             address: tokenDetails?.contractAddress,
             creator: user?.wallet?.address,
             type: TransactionType.SELL,
             amount: tokenAmount,
             price: currentPrice,
-            txHash: sell.hash,
+            txHash: explorerHash,
             name: tokenDetails?.name,
             symbol: tokenDetails?.symbol,
           });
 
           setTransactionStatus({
             status: "success",
-            hash: sell.hash,
+            hash: explorerHash,
           });
           await fetchCurrentPrice();
         }
@@ -692,6 +709,42 @@ export default function TokenPage() {
     }
     const hours = Math.floor(parseInt(seconds) / 3600);
     return `${hours} hours`;
+  };
+
+  // Listen for network changes
+  useEffect(() => {
+    const handleNetworkChange = async () => {
+      if (window.ethereum) {
+        const chainId = parseInt(await window.ethereum.request({ method: 'eth_chainId' }), 16);
+        setCurrentNetwork({
+          name: chainId === 299792 ? "𝚝𝟷 Devnet" : "Polygon Amoy",
+          chainId: chainId
+        });
+      }
+    };
+    
+    handleNetworkChange();
+    if (window.ethereum) {
+      window.ethereum.on('chainChanged', handleNetworkChange);
+    }
+    
+    return () => {
+      if (window.ethereum) {
+        window.ethereum.removeListener('chainChanged', handleNetworkChange);
+      }
+    };
+  }, []);
+
+  // Update the currency display based on network
+  const nativeCurrency = currentNetwork.chainId === 299792 ? "ETH" : "POL";
+
+  // Update explorer URL based on network
+  const getExplorerUrl = (hash: string | undefined, type: 'tx' | 'address') => {
+    if (!hash) return '#';
+    const baseUrl = currentNetwork.chainId === 299792 
+      ? "https://explorer.v006.t1protocol.com" 
+      : "https://amoy.polygonscan.com";
+    return `${baseUrl}/${type}/${hash}`;
   };
 
   if (!isClient) {
@@ -1268,18 +1321,14 @@ export default function TokenPage() {
                             : "Unknown"}
                           {recentTransactions?.txHashes?.[i] && (
                             <a
-                              href={
-                                recentTransactions?.type[i] === "CREATE"
-                                  ? `https://amoy.polygonscan.com/address/${recentTransactions.txHashes[i]}`
-                                  : `https://amoy.polygonscan.com/tx/${recentTransactions.txHashes[i]}`
-                              }
+                              href={getExplorerUrl(recentTransactions.txHashes[i], 
+                                recentTransactions?.type[i] === "CREATE" ? 'address' : 'tx'
+                              )}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-[#6C5CE7] hover:underline"
                             >
-                              {recentTransactions?.type[i] === "CREATE"
-                                ? "View Contract"
-                                : "View Tx"}
+                              {recentTransactions?.type[i] === "CREATE" ? "View Contract" : "View Tx"}
                             </a>
                           )}
                         </div>
@@ -1291,7 +1340,7 @@ export default function TokenPage() {
                           {parseFloat(
                             recentTransactions?.prices[i] || "0"
                           )?.toFixed(10)}{" "}
-                          POL
+                          {nativeCurrency}
                         </div>
                       )}
                       <div className="text-white/50 text-xs">
@@ -1366,9 +1415,8 @@ export default function TokenPage() {
                           {tradeType === "buy" ? (
                             <>
                               <div className="w-6 h-6 rounded-full bg-[#ffae5c]/30 flex items-center justify-center">
-                                P
+                                {currentNetwork.chainId === 299792 ? "E" : "P"}
                               </div>
-                              <span>POL</span>
                             </>
                           ) : (
                             <>
@@ -1488,7 +1536,7 @@ export default function TokenPage() {
                     <div className="text-white/80">
                       {tradeType === "buy"
                         ? tokenDetails?.symbol || "..."
-                        : "POL"}
+                        : nativeCurrency}
                     </div>
                   </div>
                 </div>
@@ -1508,7 +1556,7 @@ export default function TokenPage() {
                   <div className="flex items-center gap-1 text-white/60 text-sm">
                     <span>
                       1 {tokenDetails?.symbol || "..."} ≈ $
-                      {tokenDetails?.initialPrice || "Loading..."}
+                      {tokenDetails?.initialPrice || "Loading..."} {nativeCurrency}
                     </span>
                   </div>
                 </div>
@@ -1858,12 +1906,10 @@ export default function TokenPage() {
                   </h3>
                   <Button
                     className="mt-4 bg-[#ffae5c]"
-                    onClick={() =>
-                      window.open(
-                        `https://amoy.polygonscan.com/tx/${transactionStatus.hash}`,
-                        "_blank"
-                      )
-                    }
+                    onClick={() => window.open(
+                      getExplorerUrl(transactionStatus.hash, 'tx'),
+                      "_blank"
+                    )}
                   >
                     View on Explorer
                   </Button>

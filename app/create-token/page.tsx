@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/Navbar";
 import {
@@ -82,11 +82,45 @@ const formatDuration = (seconds: number): string => {
   return `${hours} hour${hours > 1 ? "s" : ""}`;
 };
 
+// Add network type
+type Network = {
+  name: string;
+  chainId: number;
+};
+
 export default function LaunchPage() {
   const [isLaunching, setIsLaunching] = useState(false);
   const [launchSuccess, setLaunchSuccess] = useState(false);
+  const [currentNetwork, setCurrentNetwork] = useState<Network>({
+    name: "Polygon Amoy",
+    chainId: 80002
+  });
   const { ready, authenticated, login, user } = usePrivy();
   const router = useRouter();
+
+  // Listen for network changes
+  useEffect(() => {
+    const handleNetworkChange = async () => {
+      if (window.ethereum) {
+        const chainId = parseInt(await window.ethereum.request({ method: 'eth_chainId' }), 16);
+        setCurrentNetwork({
+          name: chainId === 299792 ? "𝚝𝟷 Devnet" : "Polygon Amoy",
+          chainId: chainId
+        });
+      }
+    };
+    
+    handleNetworkChange();
+    if (window.ethereum) {
+      window.ethereum.on('chainChanged', handleNetworkChange);
+    }
+    
+    return () => {
+      if (window.ethereum) {
+        window.ethereum.removeListener('chainChanged', handleNetworkChange);
+      }
+    };
+  }, []);
 
   // Form state
   const [tokenForm, setTokenForm] = useState<TokenForm>({
@@ -189,7 +223,8 @@ export default function LaunchPage() {
         priceInEth,
         tokenForm.creatorLockupPeriod,
         tokenForm.lockLiquidity,
-        tokenForm.liquidityLockPeriod
+        tokenForm.liquidityLockPeriod,
+        currentNetwork.name.toLowerCase().includes("polygon") ? "polygon" : "t1"
       );
       console.log("Token created at address:", tokenAddress);
 

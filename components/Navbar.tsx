@@ -15,6 +15,107 @@ import { usePathname } from "next/navigation";
 import WalletButton from "./WalletButton";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { usePrivy } from "@privy-io/react-auth";
+import React from 'react';
+
+type NetworkConfig = {
+  name: string;
+  chainId: number;
+  rpcUrl: string;
+  explorer: string;
+  icon?: string ;
+};
+
+const networks: NetworkConfig[] = [
+  {
+    name: "Polygon Amoy",
+    chainId: 80002,
+    rpcUrl: "https://rpc-amoy.polygon.technology/",
+    explorer: "https://amoy.polygonscan.com",
+    icon: "/pol.png"
+  },
+  {
+    name: "𝚝𝟷 Devnet",
+    chainId: 299792,
+    rpcUrl: "https://rpc.v006.t1protocol.com",
+    explorer: "https://explorer.v006.t1protocol.com/",
+    icon: "/t1.png"
+  }
+];
+
+function NetworkSwitcher() {
+  const { sendTransaction } = usePrivy();
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentNetwork, setCurrentNetwork] = useState(networks[0]);
+
+  const handleNetworkSwitch = async (network: NetworkConfig) => {
+    try {
+      await window.ethereum?.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: `0x${network.chainId.toString(16)}` }],
+      });
+      setCurrentNetwork(network);
+      setIsOpen(false);
+    } catch (error) {
+      console.error("Failed to switch network:", error);
+    }
+  };
+
+  return (
+    <div className="relative">
+      <Button
+        variant="outline"
+        className="flex items-center gap-2 bg-black/20 border-[#ffae5c]/20"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <div className="flex items-center gap-2">
+          <Shield className="w-4 h-4 text-[#ffae5c]" />
+          <span className="text-white/80">{currentNetwork.name}</span>
+          <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+        </div>
+      </Button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className="absolute top-full left-0 mt-2 w-56 bg-black/90 border border-[#ffae5c]/20 rounded-xl backdrop-blur-xl overflow-hidden z-50"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="p-2">
+              {networks.map((network) => (
+                <div
+                  key={network.chainId}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg text-white/70 hover:text-white hover:bg-[#ffae5c]/10 transition-colors cursor-pointer ${
+                    network.chainId === currentNetwork.chainId ? "bg-[#ffae5c]/10 text-white" : ""
+                  }`}
+                  onClick={() => handleNetworkSwitch(network)}
+                >
+                  {network.icon && (
+                    typeof network.icon === 'string' ? (
+                      <Image
+                        src={network.icon}
+                        alt={network.name}
+                        width={20}
+                        height={20}
+                        className="rounded-full"
+                      />
+                    ) : (
+                      network.icon
+                    )
+                  )}
+                  <span>{network.name}</span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 export function Navbar() {
   const pathname = usePathname();
@@ -174,6 +275,8 @@ export function Navbar() {
 
         {/* Right Side - Network & Connect Wallet */}
         <div className="flex items-center gap-4">
+          <NetworkSwitcher />
+          
           {/* Wallet Button */}
           <WalletButton />
 
