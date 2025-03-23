@@ -10,7 +10,7 @@ const { ethereum } = isBrowser() ? window : { ethereum: null };
 const contract_address: string = ""; // Clampify Factory Contract Address
 const governance_address: string = ""; // Clampify Governance Contract Address
 
-// Add RPC URL for the network you're using (Core DAO testnet)
+// Add RPC URL for the network you're using (0G testnet)
 const RPC_URL = "https://evmrpc-testnet.0g.ai/";
 
 interface TokenInfo {
