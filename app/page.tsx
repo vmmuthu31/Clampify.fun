@@ -156,7 +156,7 @@ export default function HomePage() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
             >
-              <Link href="/launch" className="w-full sm:w-auto">
+              <Link href="/create-token" className="w-full sm:w-auto">
                 <Button
                   className="w-full sm:w-auto h-14 px-8 bg-gradient-to-r from-[#ffae5c] to-[#4834D4] 
             hover:opacity-90 rounded-xl text-lg font-medium group relative overflow-hidden"
@@ -1139,7 +1139,7 @@ export default function HomePage() {
               whileTap={{ scale: 0.95 }}
               className="inline-block"
             >
-              <Link href="/launch">
+              <Link href="/create-token">
                 <Button className="bg-gradient-to-r from-[#ffae5c] to-[#4834D4] hover:opacity-90 text-white px-8 py-3 rounded-xl text-lg">
                   Launch with Clampify
                   <ArrowRight className="ml-2 w-5 h-5" />
@@ -1545,7 +1545,7 @@ export default function HomePage() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Link href="/launch">
+                  <Link href="/create-token">
                     <Button
                       className=" md:h-14 px-4 md:px-8 bg-gradient-to-r from-[#ffae5c] to-[#4834D4] text-white hover:bg-white/90 
                         rounded-xl text-sm md:text-lg font-medium group"

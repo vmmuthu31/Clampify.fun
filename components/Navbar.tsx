@@ -43,7 +43,7 @@ export function Navbar() {
       dropdownItems: [
         {
           label: "Launch Token",
-          href: "/launch",
+          href: "/create-token",
           icon: <Rocket className="w-4 h-4" />,
         },
       ],
