@@ -1,7 +1,7 @@
 # 🛡️ Clampify – Rugproof Meme Token Launchpad  
 **A Secure, Gasless, Community-Governed Platform to Launch Sustainable Meme Tokens**  
 
----
+![cover](https://github.com/user-attachments/assets/feb5234d-5ac2-42b1-a8b3-94897d1ccf61)
 
 ## 🚨 The Problem
 
@@ -131,15 +131,7 @@ Clampify is the **first truly rugproof launchpad** that puts **community and tra
 **Launch meme tokens that don’t rug.**  
 Let’s build a safer, decentralized on-chain culture — together.
 
-👉 [Clampify.fun](https://clampify.fun)  
-🧠 Built for the TEE Hackathon  
+👉 [Clampify.fun](https://clampify-fun.vercel.app)  
+🧠 Built for the Ethglobal 
 🔐 #RugproofByDesign  
 🚀 #LaunchWithClampify  
-
-
-## Contract Addresses
-
-- Clampify Factory: 0x918F00192e2b95e1BE368737b17cfFae43d677f5
-- Clampify Governance: 0x264814128dC06E7a9B63fD782D5fDb5DdBb38bb3
-- Clampify Dex: 0xf1b01b252E30e826D84D569A26d9eF0b4aa095dD
-
