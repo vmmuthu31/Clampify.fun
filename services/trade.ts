@@ -278,6 +278,9 @@ export const sellTokens = async (
 
     const amountInWei = ethers.utils.parseEther(amount);
 
+    console.log(amountInWei);
+    console.log(creator);
+
     const tx = await contract.sellTokens(creator, amountInWei);
 
     const receipt = await tx.wait();

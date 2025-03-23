@@ -370,6 +370,7 @@ export const hasVoted = async (
 };
 
 export const createProposal = async (
+  creator: string,
   tokenAddress: string,
   title: string,
   description: string,

@@ -387,6 +387,7 @@ export default function GovernancePage() {
     setIsSubmitting(true);
     try {
       await createProposal(
+        user?.wallet?.address || "",
         values.tokenAddress,
         values.title,
         values.description,
