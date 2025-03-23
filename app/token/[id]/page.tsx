@@ -59,6 +59,7 @@ import {
   CandlestickData,
 } from "lightweight-charts";
 import { ITokenData, ITransaction, TransactionType } from "@/lib/types";
+import Image from "next/image";
 
 // Simulated token data
 const tokenData: ITokenData = {
@@ -360,6 +361,7 @@ export default function TokenPage() {
     if (tokenDetails?.contractAddress) {
       fetchCurrentPrice();
     }
+    // eslint-disable-next-line
   }, [tokenDetails?.contractAddress]);
 
   const handleTrade = async () => {
@@ -704,10 +706,12 @@ export default function TokenPage() {
           <div className="flex items-center gap-4">
             {tokenImage && (
               <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#ffae5c]/20">
-                <img
+                <Image
                   src={tokenImage}
                   alt={tokenDetails?.name || "Token"}
                   className="w-full h-full object-cover"
+                  width={64}
+                  height={64}
                 />
               </div>
             )}
