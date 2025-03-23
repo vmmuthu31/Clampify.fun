@@ -190,6 +190,7 @@ export default function LaunchPage() {
         tokenForm.lockLiquidity,
         tokenForm.liquidityLockPeriod
       );
+      console.log("Token created at address:", tokenAddress);
 
       // Create token record with all fields
       await createTokenRecord({

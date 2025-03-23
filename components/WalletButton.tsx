@@ -121,7 +121,7 @@ function WalletButton() {
         <DropdownMenuItem className="cursor-pointer" asChild>
           <a
             // TODO: change to update explorer link
-            href={`https://testnet.0g.explorers.guru/account/${address}`}
+            href={`https://amoy.polygonscan.com/account/${address}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex w-full items-center"

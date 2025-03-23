@@ -139,7 +139,7 @@ Let’s build a safer, decentralized on-chain culture — together.
 
 ## Contract Addresses
 
-- Clampify Factory: 0x918F00192e2b95e1BE368737b17cfFae43d677f5
-- Clampify Governance: 0x264814128dC06E7a9B63fD782D5fDb5DdBb38bb3
-- Clampify Dex: 0xf1b01b252E30e826D84D569A26d9eF0b4aa095dD
+- Clampify Factory: 0xf1b01b252E30e826D84D569A26d9eF0b4aa095dD
+- Clampify Governance: 0x51708A5d10D29c030f3Cd590714dd9795ee53732
+- Clampify Dex: 0x3FC6C1FD08837bd6a92e7B2e13F097D1351BcbdB
 

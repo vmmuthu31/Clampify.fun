@@ -24,12 +24,30 @@ export default function WalletButtonProvider({
     },
     testnet: true,
   };
+
+  const polygonAmoy = {
+    id: 80002,
+    name: "Polygon Amoy",
+    network: "Polygon Amoy",
+    nativeCurrency: { name: "Polygon", symbol: "MATIC", decimals: 18 },
+    rpcUrls: {
+      default: { http: ["rpc-amoy.polygon.technology"] },
+    },
+    blockExplorers: {
+      default: {
+        name: "Polygon Amoy",
+        url: "https://amoy.polygonscan.com",
+      },
+    },
+    testnet: true,
+  };
+
   return (
     <PrivyProvider
       appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ""}
       config={{
-        defaultChain: zeroGTestnet,
-        supportedChains: [zeroGTestnet],
+        defaultChain: polygonAmoy,
+        supportedChains: [polygonAmoy],
         appearance: {
           theme: "light",
           accentColor: "#676FFF",

@@ -288,13 +288,13 @@ export function Navbar() {
                     <Shield className="w-5 h-5 text-[#ffae5c]" />
                     <div className="absolute -right-1 -top-1 w-2 h-2 rounded-full bg-green-400" />
                   </div>
-                  <span className="text-white/80">Connected to 0G Network</span>
+                  <span className="text-white/80">Connected to Polygon Amoy Network</span>
                 </div>
 
                 {/* Additional Mobile Links */}
                 <div className="space-y-4">
                   <a
-                    href="https://chainscan-newton.0g.ai"
+                    href="https://amoy.polygonscan.com"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-between p-3 rounded-xl bg-[#ffae5c]/5 text-white/70 hover:text-white border border-[#ffae5c]/20"

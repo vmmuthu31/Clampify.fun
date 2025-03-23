@@ -7,11 +7,11 @@ const isBrowser = (): boolean => typeof window !== "undefined";
 
 const { ethereum } = isBrowser() ? window : { ethereum: null };
 
-const contract_address: string = "0x918F00192e2b95e1BE368737b17cfFae43d677f5"; // Clampify Factory Contract Address
-const governance_address: string = "0x264814128dC06E7a9B63fD782D5fDb5DdBb38bb3"; // Clampify Governance Contract Address
+const contract_address: string = "0xf1b01b252E30e826D84D569A26d9eF0b4aa095dD"; // Clampify Factory Contract Address
+const governance_address: string = "0x51708A5d10D29c030f3Cd590714dd9795ee53732"; // Clampify Governance Contract Address
 
 // Add RPC URL for the network you're using (0G testnet)
-const RPC_URL = "https://rpc.test2.btcs.network/";
+const RPC_URL = "https://rpc-amoy.polygon.technology/";
 
 interface TokenInfo {
   name: string;
@@ -73,8 +73,11 @@ export const Mint = async (
 
     const receipt = await tx.wait();
 
-    const tokenCreatedEvent = receipt.events[0];
+    console.log("Receipt:", receipt);
+
+    const tokenCreatedEvent = receipt.events[1];
     const tokenAddress = tokenCreatedEvent.address;
+    console.log("Token created at address:", tokenAddress);
     return tokenAddress;
   } catch (error) {
     console.error("Detailed error:", error);

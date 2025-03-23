@@ -395,9 +395,9 @@ export default function TokenPage() {
           await recordTransaction({
             address: tokenDetails?.contractAddress || undefined,
             creator: user?.wallet?.address,
-            type: TransactionType.CREATE,
+            type: TransactionType.BUY,
             amount: estimatedReturn,
-            price: currentPrice,
+            price: coreAmount,
             txHash: buy.hash,
             name: tokenDetails?.name || undefined,
             symbol: tokenDetails?.symbol || undefined,
@@ -1268,8 +1268,8 @@ export default function TokenPage() {
                             <a
                               href={
                                 recentTransactions?.type[i] === "CREATE"
-                                  ? `https://scan.test2.btcs.network/address/${recentTransactions.txHashes[i]}`
-                                  : `https://scan.test2.btcs.network/tx/${recentTransactions.txHashes[i]}`
+                                  ? `https://amoy.polygonscan.com/address/${recentTransactions.txHashes[i]}`
+                                  : `https://amoy.polygonscan.com/tx/${recentTransactions.txHashes[i]}`
                               }
                               target="_blank"
                               rel="noopener noreferrer"
@@ -1364,9 +1364,9 @@ export default function TokenPage() {
                           {tradeType === "buy" ? (
                             <>
                               <div className="w-6 h-6 rounded-full bg-[#ffae5c]/30 flex items-center justify-center">
-                                C
+                                P
                               </div>
-                              <span>CoreDAO</span>
+                              <span>POL</span>
                             </>
                           ) : (
                             <>
@@ -1486,7 +1486,7 @@ export default function TokenPage() {
                     <div className="text-white/80">
                       {tradeType === "buy"
                         ? tokenDetails?.symbol || "..."
-                        : "CoreDAO"}
+                        : "POL"}
                     </div>
                   </div>
                 </div>
@@ -1858,7 +1858,7 @@ export default function TokenPage() {
                     className="mt-4 bg-[#ffae5c]"
                     onClick={() =>
                       window.open(
-                        `https://scan.test2.btcs.network/tx/${transactionStatus.hash}`,
+                        `https://amoy.polygonscan.com/tx/${transactionStatus.hash}`,
                         "_blank"
                       )
                     }
@@ -1879,7 +1879,7 @@ export default function TokenPage() {
               )}
               <Button
                 variant="ghost"
-                className="mt-4"
+                className="mt-4 ml-4 bg-[#ffae5c] text-white"
                 onClick={() => setTransactionStatus({ status: null })}
               >
                 Close
