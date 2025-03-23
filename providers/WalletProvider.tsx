@@ -19,7 +19,7 @@ export default function WalletButtonProvider({
     blockExplorers: {
       default: {
         name: "0G-Newton-Testnet",
-        url: "https://chainscan-newton.0g.ai",
+        url: "https://testnet.0g.explorers.guru",
       },
     },
     testnet: true,

@@ -86,7 +86,7 @@ function WalletButton() {
 
       <DropdownMenuContent
         align="end"
-        className="w-56 border-gray-700 rounded-lg bg-black/20"
+        className="w-56 border-gray-700 text-white rounded-lg bg-black/20"
       >
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
@@ -121,7 +121,7 @@ function WalletButton() {
         <DropdownMenuItem className="cursor-pointer" asChild>
           <a
             // TODO: change to update explorer link
-            href={`https://scan.test2.btcs.network/address/${address}`}
+            href={`https://testnet.0g.explorers.guru/account/${address}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex w-full items-center"
