@@ -135,3 +135,11 @@ Let’s build a safer, decentralized on-chain culture — together.
 🧠 Built for the TEE Hackathon  
 🔐 #RugproofByDesign  
 🚀 #LaunchWithClampify  
+
+
+## Contract Addresses
+
+- Clampify Factory: 0x918F00192e2b95e1BE368737b17cfFae43d677f5
+- Clampify Governance: 0x264814128dC06E7a9B63fD782D5fDb5DdBb38bb3
+- Clampify Dex: 0xf1b01b252E30e826D84D569A26d9eF0b4aa095dD
+

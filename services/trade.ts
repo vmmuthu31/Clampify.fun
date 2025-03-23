@@ -6,10 +6,9 @@ const isBrowser = (): boolean => typeof window !== "undefined";
 
 const { ethereum } = isBrowser() ? window : { ethereum: null };
 
-const contract_address: string = ""; // Clampify Factory Contract Address
+const contract_address: string = "0x918F00192e2b95e1BE368737b17cfFae43d677f5"; // Clampify Factory Contract Address
 
-// Add RPC URL for the network you're using (0G testnet)
-const RPC_URL = "https://evmrpc-testnet.0g.ai/";
+const RPC_URL = "https://rpc.test2.btcs.network/";
 
 interface TokenInfo {
   name: string;
