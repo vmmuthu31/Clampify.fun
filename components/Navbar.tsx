@@ -15,15 +15,14 @@ import { usePathname } from "next/navigation";
 import WalletButton from "./WalletButton";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { usePrivy } from "@privy-io/react-auth";
-import React from 'react';
+import React from "react";
 
 type NetworkConfig = {
   name: string;
   chainId: number;
   rpcUrl: string;
   explorer: string;
-  icon?: string ;
+  icon?: string;
 };
 
 const networks: NetworkConfig[] = [
@@ -32,26 +31,25 @@ const networks: NetworkConfig[] = [
     chainId: 80002,
     rpcUrl: "https://rpc-amoy.polygon.technology/",
     explorer: "https://amoy.polygonscan.com",
-    icon: "/pol.png"
+    icon: "/pol.png",
   },
   {
     name: "𝚝𝟷 Devnet",
     chainId: 299792,
     rpcUrl: "https://rpc.v006.t1protocol.com",
     explorer: "https://explorer.v006.t1protocol.com/",
-    icon: "/t1.png"
-  }
+    icon: "/t1.png",
+  },
 ];
 
 function NetworkSwitcher() {
-  const { sendTransaction } = usePrivy();
   const [isOpen, setIsOpen] = useState(false);
   const [currentNetwork, setCurrentNetwork] = useState(networks[0]);
 
   const handleNetworkSwitch = async (network: NetworkConfig) => {
     try {
       await window.ethereum?.request({
-        method: 'wallet_switchEthereumChain',
+        method: "wallet_switchEthereumChain",
         params: [{ chainId: `0x${network.chainId.toString(16)}` }],
       });
       setCurrentNetwork(network);
@@ -71,7 +69,11 @@ function NetworkSwitcher() {
         <div className="flex items-center gap-2">
           <Shield className="w-4 h-4 text-[#ffae5c]" />
           <span className="text-white/80">{currentNetwork.name}</span>
-          <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+          <ChevronDown
+            className={`w-4 h-4 transition-transform ${
+              isOpen ? "rotate-180" : ""
+            }`}
+          />
         </div>
       </Button>
 
@@ -89,12 +91,14 @@ function NetworkSwitcher() {
                 <div
                   key={network.chainId}
                   className={`flex items-center gap-3 px-4 py-3 rounded-lg text-white/70 hover:text-white hover:bg-[#ffae5c]/10 transition-colors cursor-pointer ${
-                    network.chainId === currentNetwork.chainId ? "bg-[#ffae5c]/10 text-white" : ""
+                    network.chainId === currentNetwork.chainId
+                      ? "bg-[#ffae5c]/10 text-white"
+                      : ""
                   }`}
                   onClick={() => handleNetworkSwitch(network)}
                 >
-                  {network.icon && (
-                    typeof network.icon === 'string' ? (
+                  {network.icon &&
+                    (typeof network.icon === "string" ? (
                       <Image
                         src={network.icon}
                         alt={network.name}
@@ -104,8 +108,7 @@ function NetworkSwitcher() {
                       />
                     ) : (
                       network.icon
-                    )
-                  )}
+                    ))}
                   <span>{network.name}</span>
                 </div>
               ))}
@@ -277,7 +280,7 @@ export function Navbar() {
         {/* Right Side - Network & Connect Wallet */}
         <div className="flex items-center gap-4">
           <NetworkSwitcher />
-          
+
           {/* Wallet Button */}
           <WalletButton />
 
@@ -392,7 +395,9 @@ export function Navbar() {
                     <Shield className="w-5 h-5 text-[#ffae5c]" />
                     <div className="absolute -right-1 -top-1 w-2 h-2 rounded-full bg-green-400" />
                   </div>
-                  <span className="text-white/80">Connected to Polygon Amoy Network</span>
+                  <span className="text-white/80">
+                    Connected to Polygon Amoy Network
+                  </span>
                 </div>
 
                 {/* Additional Mobile Links */}
