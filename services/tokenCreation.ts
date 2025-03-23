@@ -36,7 +36,8 @@ export const Mint = async (
   initialPrice: string,
   creatorLockupPeriod: string,
   lockLiquidity: boolean,
-  liquidityLockPeriod: string
+  liquidityLockPeriod: string,
+  chain: string
 ): Promise<string> => {
   try {
     const provider =
@@ -48,6 +49,85 @@ export const Mint = async (
 
     if (!signer) {
       throw new Error("No wallet connected");
+    }
+
+    if (chain === "polygon") {
+    const  contract_address = "0x7ECd045257107c84129BCce9DBa8feb211b4a7E7";
+
+
+      const contract = new ethers.Contract(
+        contract_address,
+        ClampifyFactory,
+        signer
+      );
+      const initialPriceWei = ethers.utils.parseEther(initialPrice);
+      const depositAmount = ethers.utils.parseEther("0.01");
+  
+      console.log("Creating token with creator:", creator);
+      // Create token
+      const tx = await contract.createToken(
+        creator,
+        name,
+        symbol,
+        initialSupply,
+        maxSupply,
+        initialPriceWei,
+        creatorLockupPeriod,
+        lockLiquidity,
+        liquidityLockPeriod,
+        {
+          value: depositAmount,
+        }
+      );
+  
+      const receipt = await tx.wait();
+  
+      console.log("Receipt:", receipt);
+  
+      const tokenCreatedEvent = receipt.events[1];
+      const tokenAddress = tokenCreatedEvent.address;
+      console.log("Token created at address:", tokenAddress);
+      return tokenAddress;
+
+
+
+
+    } else if (chain === "t1") {
+      const  contract_address = "0x7E0381afB5c67DC81AA5509f5B71bbf23658958D";
+
+      const contract = new ethers.Contract(
+        contract_address,
+        ClampifyFactory,
+        signer
+      );
+      const initialPriceWei = ethers.utils.parseEther(initialPrice);
+      const depositAmount = ethers.utils.parseEther("0.01");
+  
+      console.log("Creating token with creator:", creator);
+      // Create token
+      const tx = await contract.createToken(
+        creator,
+        name,
+        symbol,
+        initialSupply,
+        maxSupply,
+        initialPriceWei,
+        creatorLockupPeriod,
+        lockLiquidity,
+        liquidityLockPeriod,
+        {
+          value: depositAmount,
+        }
+      );
+  
+      const receipt = await tx.wait();
+  
+      console.log("Receipt:", receipt);
+  
+      const tokenCreatedEvent = receipt.events[1];
+      const tokenAddress = tokenCreatedEvent.address;
+      console.log("Token created at address:", tokenAddress);
+      return tokenAddress;
     }
     const contract = new ethers.Contract(
       contract_address,

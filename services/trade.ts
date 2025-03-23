@@ -6,7 +6,13 @@ const isBrowser = (): boolean => typeof window !== "undefined";
 
 const { ethereum } = isBrowser() ? window : { ethereum: null };
 
-const contract_address: string = "0x7ECd045257107c84129BCce9DBa8feb211b4a7E7"; // Clampify Factory Contract Address
+const contract_address: string = "0x7ECd045257107c84129BCce9DBa8feb211b4a7E7"; // Polygon Clampify Factory Contract Address
+const t1_contract_address: string = "0x7E0381afB5c67DC81AA5509f5B71bbf23658958D"; // T1 Clampify Factory Contract Address
+
+// Helper function to get contract address based on chain
+const getContractAddress = (chain: string): string => {
+  return chain === "t1" ? t1_contract_address : contract_address;
+};
 
 const RPC_URL = "https://rpc.test2.btcs.network/";
 
@@ -117,7 +123,8 @@ export const buyTokens = async (
   creator: string,
   tokenAddress: string,
   amount: string,
-  tokenAmount: string
+  tokenAmount: string,
+  chain: string
 ): Promise<{ hash: string }> => {
   try {
     console.log(tokenAddress, amount, tokenAmount, creator);
@@ -138,7 +145,11 @@ export const buyTokens = async (
     const amountInWei = ethers.utils.parseEther(amount);
     console.log(amountInWei);
     console.log(amountInWei);
-    const contract = new ethers.Contract(tokenAddress, ClampifyToken, signer);
+    const contract = new ethers.Contract(
+      getContractAddress(chain),
+      ClampifyToken,
+      signer
+    );
     const tokenAmountInWei = ethers.utils.parseEther(tokenAmount);
 
     console.log(contract);
@@ -254,7 +265,8 @@ export const TokenReturnOnSell = async (
 export const sellTokens = async (
   creator: string,
   tokenAddress: string,
-  amount: string
+  amount: string,
+  chain: string
 ) => {
   try {
     console.log(tokenAddress, amount, creator);
@@ -272,7 +284,11 @@ export const sellTokens = async (
       throw new Error("No wallet connected");
     }
 
-    const contract = new ethers.Contract(tokenAddress, ClampifyToken, signer);
+    const contract = new ethers.Contract(
+      getContractAddress(chain),
+      ClampifyToken,
+      signer
+    );
 
     console.log(contract);
 
