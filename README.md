@@ -146,8 +146,8 @@ Let’s build a safer, decentralized on-chain culture — together.
 
 ## Contract Addresses on t1
 
-- Clampify Factory: 0xD4f998A32961cD69B5Aea87362861557b7dF05F4
-- Clampify Governance: 0xd63428D98892F0B47aE9E8c8aFBb88C2453e4C77
-- Clampify Dex: 0x69b2EaC3e8998ECad55aFB96475e17799f4C6AB9
+- Clampify Factory: https://explorer.v006.t1protocol.com/address/0x7E0381afB5c67DC81AA5509f5B71bbf23658958D
+- Clampify Governance: https://explorer.v006.t1protocol.com/address/0xD8120C338b3942c9b41eb190333C30d5D96d3433
+- Clampify Dex: https://explorer.v006.t1protocol.com/address/0x4157aE4Ead99eA9b6F3227cB27Cb11fD0dbF8De3
 
 
