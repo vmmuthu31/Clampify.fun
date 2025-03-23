@@ -28,6 +28,8 @@ import { useRouter } from "next/navigation";
 import { ethers } from "ethers";
 import { usePrivy } from "@privy-io/react-auth";
 import { createTokenRecord, recordTransaction } from "@/services/api";
+import { TransactionType } from "@/lib/types";
+import Image from "next/image";
 
 // Lock period options in seconds
 const CREATOR_LOCK_PERIODS = [
@@ -206,8 +208,8 @@ export default function LaunchPage() {
 
       await recordTransaction({
         address: tokenAddress,
-        creator: user?.wallet?.address,
-        type: "CREATE",
+        creator: user?.wallet?.address || undefined,
+        type: TransactionType.CREATE,
         amount: tokenForm.initialSupply,
         price: tokenForm.initialPrice,
         txHash: tokenAddress,
@@ -433,10 +435,12 @@ export default function LaunchPage() {
                 <div className="text-center">
                   {imagePreview ? (
                     <div className="relative w-32 h-32 mx-auto">
-                      <img
+                      <Image
                         src={imagePreview}
                         alt="Token preview"
                         className="w-full h-full object-cover rounded-lg"
+                        width={32}
+                        height={32}
                       />
                       <button
                         onClick={() => {

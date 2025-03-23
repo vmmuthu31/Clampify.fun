@@ -1,26 +1,4 @@
-interface TokenRecord {
-  address: string;
-  name: string;
-  symbol: string;
-  creator: string;
-  initialSupply: string;
-  maxSupply: string;
-  initialPrice: string;
-  creatorLockupPeriod: string;
-  lockLiquidity: boolean;
-  liquidityLockPeriod: string;
-  image: string;
-}
-
-interface TransactionData {
-  account: string;
-  isBuy: boolean;
-  tokenAmount: string;
-  ethAmount: string;
-  price: string;
-  timestamp: number;
-  tokenAddress: string;
-}
+import { ITransactionData, TokenRecord } from "@/lib/types";
 
 export const createTokenRecord = async (tokenData: TokenRecord) => {
   try {
@@ -43,8 +21,7 @@ export const createTokenRecord = async (tokenData: TokenRecord) => {
   }
 };
 
-export const recordTransaction = async (transactionData: TransactionData) => {
-  console.log("transactionData", transactionData);
+export const recordTransaction = async (transactionData: ITransactionData) => {
   const response = await fetch("/api/transactions", {
     method: "POST",
     headers: {
