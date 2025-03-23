@@ -155,6 +155,7 @@ export function Navbar() {
     },
     { label: "Stats", href: "/stats" },
     { label: "Docs", href: "/docs" },
+    { label: "Agent", href: "/agent" },
   ];
 
   return (
